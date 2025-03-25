@@ -46,5 +46,50 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/activities")
+          .then((response) => response.json())
+          .then((activities) => {
+            const activitiesList = document.getElementById("activities-list");
+            activitiesList.innerHTML = "";
+
+            for (const [activityName, activityDetails] of Object.entries(activities)) {
+              const activityCard = document.createElement("div");
+              activityCard.className = "activity-card";
+
+              const activityTitle = document.createElement("h4");
+              activityTitle.textContent = activityName;
+              activityCard.appendChild(activityTitle);
+
+              const activityDescription = document.createElement("p");
+              activityDescription.textContent = activityDetails.description;
+              activityCard.appendChild(activityDescription);
+
+              const activitySchedule = document.createElement("p");
+              activitySchedule.textContent = `Schedule: ${activityDetails.schedule}`;
+              activityCard.appendChild(activitySchedule);
+
+              const participantsSection = document.createElement("div");
+              participantsSection.className = "participants";
+
+              const participantsTitle = document.createElement("h5");
+              participantsTitle.textContent = "Participants:";
+              participantsSection.appendChild(participantsTitle);
+
+              const participantsList = document.createElement("ul");
+              activityDetails.participants.forEach((participant) => {
+                const participantItem = document.createElement("li");
+                participantItem.textContent = participant;
+                participantsList.appendChild(participantItem);
+              });
+              participantsSection.appendChild(participantsList);
+
+              activityCard.appendChild(participantsSection);
+              activitiesList.appendChild(activityCard);
+            }
+          });
+      });
+    </script>
   </body>
 </html>
